@@ -35,6 +35,10 @@ export class UserService {
     return await this.repository.findOne({ where: { oauth_id: oauthId } });
   }
 
+  async getUserInfo(id: number) {
+    return await this.repository.findOne(id);
+  }
+
   async update(id: number, body: any) {
     return await this.repository.update(id, body);
   }

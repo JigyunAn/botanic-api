@@ -30,6 +30,11 @@ export class UserController {
     return this.userService.loginByOauthId(body);
   }
 
+  @Get(':id')
+  findUserInfo(@Param('id') id: string) {
+    return this.userService.getUserInfo(+id);
+  }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);

@@ -8,6 +8,7 @@ import {
   utilities as nestWinstonModuleUtilities,
   WinstonModule,
 } from 'nest-winston';
+import { NotificationModule } from './notification/notification.module';
 import * as winston from 'winston';
 import * as Joi from 'joi';
 
@@ -64,6 +65,7 @@ import * as Joi from 'joi';
       },
       inject: [ConfigService],
     }),
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
