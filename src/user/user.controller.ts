@@ -32,7 +32,7 @@ export class UserController {
 
   @Get(':id')
   findUserInfo(@Param('id') id: string) {
-    return this.userService.getUserInfo(+id);
+    return this.userService.findOne(+id);
   }
 
   @Put(':id')

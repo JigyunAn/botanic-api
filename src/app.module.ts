@@ -9,6 +9,8 @@ import {
   WinstonModule,
 } from 'nest-winston';
 import { NotificationModule } from './notification/notification.module';
+import { StoreModule } from './store/store.module';
+import { LikeModule } from './like/like.module';
 import * as winston from 'winston';
 import * as Joi from 'joi';
 
@@ -46,7 +48,7 @@ import * as Joi from 'joi';
         return {
           type: 'postgres',
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
-          synchronize: false,
+          synchronize: true,
           logging: false,
           extra: {
             ssl: { rejectUnauthorized: false },
@@ -66,6 +68,8 @@ import * as Joi from 'joi';
       inject: [ConfigService],
     }),
     NotificationModule,
+    StoreModule,
+    LikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

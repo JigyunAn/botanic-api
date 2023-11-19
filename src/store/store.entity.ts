@@ -1,16 +1,11 @@
-import { Entity, Column, Index, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, Index, OneToMany } from 'typeorm';
 import { Point } from 'geojson';
 import { BaseModel } from '../common/entity/base.entity';
 import { Like } from 'src/like/like.entity';
-//import { Review } from './review.entity';
-
 @Entity()
-export class User extends BaseModel {
+export class Store extends BaseModel {
   @Column({ type: 'varchar' })
-  nickname: string;
-
-  @Column({ type: 'varchar' })
-  phone: string;
+  name: string;
 
   @Column({ type: 'varchar' })
   email: string;
@@ -18,11 +13,17 @@ export class User extends BaseModel {
   @Column({ type: 'varchar' })
   password: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  oauth_id: string;
-
   @Column('jsonb', { default: [] })
   image: string[];
+
+  @Column({ type: 'varchar' })
+  store_info_text: string;
+
+  @Column({ type: 'int' })
+  delivery_price: number;
+
+  @Column({ type: 'varchar' })
+  role: string;
 
   @Index({ spatial: true })
   @Column({
@@ -33,15 +34,12 @@ export class User extends BaseModel {
   })
   location: Point;
 
-  @Column({ type: 'varchar', nullable: true })
-  address1: string;
+  @Column({ type: 'varchar' })
+  address: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  address2: string;
+  @Column('jsonb', { default: [] })
+  category: number[];
 
   @OneToMany(() => Like, (el) => el.user)
   likes: Like[];
-
-  //   @ManyToOne(() => Review, (review) => review.user)
-  //   review: Review[];
 }
