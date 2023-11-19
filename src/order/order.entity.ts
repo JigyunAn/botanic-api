@@ -1,7 +1,8 @@
 import { BaseModel } from 'src/common/entity/base.entity';
+import { Review } from 'src/review/review.entity';
 import { Store } from 'src/store/store.entity';
 import { User } from 'src/user/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Order extends BaseModel {
@@ -45,4 +46,7 @@ export class Order extends BaseModel {
   @ManyToOne(() => Store, (el) => el.orders)
   @JoinColumn({ name: 'store_id' })
   store: Store;
+
+  @OneToMany(() => Review, (el) => el.order)
+  reviews: Store[];
 }

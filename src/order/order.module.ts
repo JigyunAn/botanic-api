@@ -10,5 +10,6 @@ import { StoreModule } from 'src/store/store.module';
   imports: [TypeOrmModule.forFeature([Order]), UserModule, StoreModule],
   controllers: [OrderController],
   providers: [OrderService],
+  exports: [OrderService],
 })
 export class OrderModule {}
