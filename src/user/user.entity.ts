@@ -2,6 +2,8 @@ import { Entity, Column, Index, ManyToOne, OneToMany } from 'typeorm';
 import { Point } from 'geojson';
 import { BaseModel } from '../common/entity/base.entity';
 import { Like } from 'src/like/like.entity';
+import { Review } from 'src/review/review.entity';
+import { Order } from 'src/order/order.entity';
 //import { Review } from './review.entity';
 
 @Entity()
@@ -39,9 +41,12 @@ export class User extends BaseModel {
   @Column({ type: 'varchar', nullable: true })
   address2: string;
 
-  @OneToMany(() => Like, (el) => el.user)
+  @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
 
-  //   @ManyToOne(() => Review, (review) => review.user)
-  //   review: Review[];
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }

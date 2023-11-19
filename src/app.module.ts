@@ -11,6 +11,8 @@ import {
 import { NotificationModule } from './notification/notification.module';
 import { StoreModule } from './store/store.module';
 import { LikeModule } from './like/like.module';
+import { ReviewModule } from './review/review.module';
+import { OrderModule } from './order/order.module';
 import * as winston from 'winston';
 import * as Joi from 'joi';
 
@@ -70,6 +72,8 @@ import * as Joi from 'joi';
     NotificationModule,
     StoreModule,
     LikeModule,
+    ReviewModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

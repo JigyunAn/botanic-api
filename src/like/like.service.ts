@@ -17,8 +17,8 @@ export class LikeService {
   async create(body: any) {
     const { userId, storeId } = body;
     const [user, store] = await Promise.all([
-      await this.userService.findOne(userId),
-      await this.storeService.findOne(storeId),
+      this.userService.findOne(userId),
+      this.storeService.findOne(storeId),
     ]);
     const data = {
       user,
