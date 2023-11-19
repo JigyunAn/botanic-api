@@ -27,19 +27,18 @@ export class OrderService {
     return await this.repository.save(data);
   }
 
-  findAll() {
-    return `This action returns all order`;
+  async findByUser(userId) {
+    return await this.repository.find({
+      where: [
+        { user: { id: userId }, reserv: 0 },
+        { user: { id: userId }, reserv: 1 },
+      ],
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
-  }
-
-  update(id: number, updateOrderDto: any) {
-    return `This action updates a #${id} order`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  async findCancelOrder(userId) {
+    return await this.repository.find({
+      where: [{ user: { id: userId }, status: 0 }],
+    });
   }
 }

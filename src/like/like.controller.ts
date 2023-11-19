@@ -22,14 +22,4 @@ export class LikeController {
   findOne(@Param('userId') id: string) {
     return this.likeService.findMyLike(+id);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLikeDto: any) {
-    return this.likeService.update(+id, updateLikeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.likeService.remove(+id);
-  }
 }

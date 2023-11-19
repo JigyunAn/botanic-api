@@ -33,20 +33,4 @@ export class LikeService {
       relations: { store: true },
     });
   }
-
-  findAll() {
-    return `This action returns all like`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} like`;
-  }
-
-  update(id: number, updateLikeDto: any) {
-    return `This action updates a #${id} like`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} like`;
-  }
 }
