@@ -18,9 +18,9 @@ export class ReviewController {
     return this.reviewService.create(createReviewDto);
   }
 
-  @Get()
-  findAll() {
-    return this.reviewService.findAll();
+  @Get('store/:storeId')
+  findAll(@Param('storeId') storeId: string) {
+    return this.reviewService.findByStore(+storeId);
   }
 
   @Get(':id')

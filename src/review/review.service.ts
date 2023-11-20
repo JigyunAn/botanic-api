@@ -30,6 +30,10 @@ export class ReviewService {
     return await this.repository.save(data);
   }
 
+  async findByStore(storeId) {
+    return await this.repository.find({ where: { store: { id: storeId } } });
+  }
+
   findAll() {
     return `This action returns all review`;
   }
@@ -42,7 +46,7 @@ export class ReviewService {
     return `This action updates a #${id} review`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  async remove(id: number) {
+    return await this.repository.delete(id);
   }
 }
