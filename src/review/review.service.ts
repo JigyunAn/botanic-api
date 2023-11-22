@@ -30,8 +30,12 @@ export class ReviewService {
     return await this.repository.save(data);
   }
 
-  async findByStore(storeId) {
+  async findByStore(storeId: number) {
     return await this.repository.find({ where: { store: { id: storeId } } });
+  }
+
+  async findReview(limit: number) {
+    return this.repository.find({ take: limit });
   }
 
   findAll() {

@@ -12,7 +12,7 @@ export class Review extends BaseModel {
   @Column('jsonb', { default: [] })
   image: string[];
 
-  @Column({ type: 'int' })
+  @Column({ type: 'float8' })
   rate: number;
 
   @ManyToOne(() => User, (el) => el.reviews)

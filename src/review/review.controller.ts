@@ -23,6 +23,11 @@ export class ReviewController {
     return this.reviewService.findByStore(+storeId);
   }
 
+  @Get('all/:limit')
+  findReview(@Param('limit') limit: string) {
+    return this.reviewService.findReview(+limit);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.reviewService.findOne(+id);

@@ -42,6 +42,9 @@ export class Store extends BaseModel {
   @Column('jsonb', { default: [] })
   category: number[];
 
+  @Column('jsonb', { default: [] })
+  available_day: number[];
+
   @OneToMany(() => Like, (el) => el.store)
   likes: Like[];
 

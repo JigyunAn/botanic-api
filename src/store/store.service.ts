@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
+import { getStoreDto } from './store-dto';
 import { Store } from './store.entity';
 
 @Injectable()
@@ -14,19 +14,50 @@ export class StoreService {
     return await this.repository.save(body);
   }
 
-  async findByCategory(category: number) {
-    return await this.repository
-      .createQueryBuilder('cg')
-      .where(`cg.category @> '${category}'`)
-      .getMany();
+  async findStore(query: getStoreDto) {
+    const { category, availableDay } = query;
+    let qb = this.repository.createQueryBuilder('store');
+
+    if (category) {
+      qb = qb.andWhere(
+        'EXISTS (SELECT 1 FROM jsonb_array_elements_text(store.category) val WHERE val::text::integer = ANY(:value))',
+        { value: category },
+      );
+    }
+
+    if (availableDay) {
+      qb = qb.andWhere(
+        'EXISTS (SELECT 1 FROM jsonb_array_elements_text(store.available_day) val WHERE val::text::integer = ANY(:value1))',
+        { value1: availableDay },
+      );
+    }
+
+    return await qb.getMany();
   }
 
   async findOne(id: number) {
     return await this.repository.findOne({ where: { id } });
   }
 
-  findMyLike(user_id: number) {
-    return `This action returns a #${user_id} store`;
+  async getDetailStore(storeId: number) {
+    const storeData = await this.repository.findOne({
+      where: { id: storeId },
+      relations: { reviews: true },
+    });
+    const rate = parseFloat(this.getRate(storeData.reviews).toFixed(1));
+
+    return { ...storeData, rate };
+  }
+
+  getRate(reviews: any) {
+    if (!reviews) {
+      return 0;
+    }
+    let sum = 0;
+    for (const review of reviews) {
+      sum += review.rate;
+    }
+    return sum / reviews.length;
   }
 
   update(id: number, updateStoreDto: any) {
