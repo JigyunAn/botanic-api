@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import * as md5 from 'md5';
 
 @Injectable()
 export class UserService {
@@ -12,6 +13,8 @@ export class UserService {
 
   async create(body: any) {
     const { lat, lng, ...data } = body;
+
+    data.password = md5(body.password);
 
     if (lat) {
       const location = {
@@ -24,8 +27,19 @@ export class UserService {
   }
 
   async loginByEmail(body: any) {
-    const { email } = body;
-    return await this.repository.findOne({ where: { email } });
+    try {
+      const { email, password } = body;
+
+      const userInfo = await this.repository.findOne({ where: { email } });
+
+      if (md5(password) === userInfo.password) {
+        return userInfo;
+      } else {
+        return { msg: 'Invalid password' };
+      }
+    } catch (err) {
+      return { msg: 'Invalid email' };
+    }
   }
 
   async loginByOauthId(body: any) {
