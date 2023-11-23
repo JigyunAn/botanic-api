@@ -30,6 +30,11 @@ export class UserController {
     return this.userService.loginByOauthId(body);
   }
 
+  @Post('reset_password')
+  resetPassword(@Body() body: any) {
+    return this.userService.resetPassword(body);
+  }
+
   @Get(':id')
   findUserInfo(@Param('id') id: string) {
     return this.userService.findOne(+id);

@@ -121,4 +121,36 @@ export class UserService {
     };
     await transporter.sendMail(mailOptions);
   }
+
+  async resetPassword(body: any) {
+    const { email } = body;
+
+    const userInfo = await this.repository.findOne({ where: { email } });
+
+    if (!userInfo) {
+      return { msg: 'Invalid email' };
+    }
+
+    const newPassword = (await this.getEmailConfirmToken(email)).slice(-6);
+    await this.snedResetPasswordEmail(email, newPassword);
+    return;
+  }
+
+  async snedResetPasswordEmail(email: string, password: string) {
+    const transporter = nodeMailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      to: `${email}`,
+      subject: '비빌번호 초기화 메일',
+      html: `
+  새로운 비밀번호는 ${password} 입니다.<br/>  `,
+    };
+    await transporter.sendMail(mailOptions);
+  }
 }
