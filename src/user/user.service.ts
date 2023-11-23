@@ -103,11 +103,11 @@ export class UserService {
         pass: process.env.NODEMAILER_PASSWORD,
       },
     });
-    const token = this.getEmailConfirmToken(email);
+    const token = await this.getEmailConfirmToken(email);
     const url = `${process.env.SERVER_URL}/user/confirm/${token}/${userId}`;
 
     const mailOptions = {
-      to: 'EMAIL',
+      to: `${email}`,
       subject: '가입 인증 메일',
       html: `
     메일인증 버튼를 누르시면 가입 인증이 완료됩니다.<br/>

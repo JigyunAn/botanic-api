@@ -15,7 +15,7 @@ export class OrderService {
   ) {}
 
   async create(body: any) {
-    const { userId, storeId, ...data } = body;
+    const { userId, storeId, paymentId, paymentKey, ...data } = body;
 
     const [user, store] = await Promise.all([
       this.userService.findOne(userId),
@@ -23,6 +23,8 @@ export class OrderService {
     ]);
     data.user = user;
     data.store = store;
+    data.payment_id = paymentId;
+    data.payment_key = paymentKey;
 
     return await this.repository.save(data);
   }

@@ -27,10 +27,10 @@ export class Order extends BaseModel {
   @Column({ type: 'int' })
   total_price: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', default: 0 })
   reserv: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', default: 1 })
   status: number;
 
   @Column({ type: 'timestamp', nullable: true })
@@ -38,6 +38,12 @@ export class Order extends BaseModel {
 
   @Column({ type: 'timestamp', nullable: true })
   delivery_at: Date;
+
+  @Column({ type: 'varchar' })
+  payment_key: string;
+
+  @Column({ type: 'varchar' })
+  payment_id: string;
 
   @ManyToOne(() => User, (el) => el.orders)
   @JoinColumn({ name: 'user_id' })
