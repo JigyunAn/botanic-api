@@ -41,6 +41,12 @@ export class User extends BaseModel {
   @Column({ type: 'varchar', nullable: true })
   address2: string;
 
+  @Column({ type: 'bool', nullable: false, default: false })
+  verify: boolean;
+
+  @Column({ type: 'varchar', nullable: true })
+  device_token: string;
+
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
 

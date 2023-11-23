@@ -35,6 +35,11 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
+  @Get('confirm/:token/:userId')
+  confirmUser(@Param('token') token: string, @Param('userId') userId: string) {
+    return this.userService.emailVerify(+userId, token);
+  }
+
   @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
