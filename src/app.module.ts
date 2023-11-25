@@ -15,6 +15,7 @@ import { ReviewModule } from './review/review.module';
 import { OrderModule } from './order/order.module';
 import { ProductModule } from './product/product.module';
 import { ProductOptionModule } from './product_option/product_option.module';
+import { FormModule } from './form/form.module';
 import * as winston from 'winston';
 import * as Joi from 'joi';
 
@@ -78,6 +79,7 @@ import * as Joi from 'joi';
     OrderModule,
     ProductModule,
     ProductOptionModule,
+    FormModule,
   ],
   controllers: [AppController],
   providers: [AppService],

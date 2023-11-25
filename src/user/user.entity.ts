@@ -4,6 +4,7 @@ import { BaseModel } from '../common/entity/base.entity';
 import { Like } from 'src/like/like.entity';
 import { Review } from 'src/review/review.entity';
 import { Order } from 'src/order/order.entity';
+import { Notification } from 'src/notification/notification.entity';
 //import { Review } from './review.entity';
 
 @Entity()
@@ -55,4 +56,7 @@ export class User extends BaseModel {
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @OneToMany(() => Notification, (noti) => noti.user)
+  notifications: Notification[];
 }
