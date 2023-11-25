@@ -30,19 +30,19 @@ export class UserController {
     return this.userService.loginByOauthId(body);
   }
 
-  @Post('reset_password')
-  resetPassword(@Body() body: any) {
-    return this.userService.resetPassword(body);
-  }
-
   @Get(':id')
   findUserInfo(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
 
-  @Get('confirm/:token/:userId')
-  confirmUser(@Param('token') token: string, @Param('userId') userId: string) {
-    return this.userService.emailVerify(+userId, token);
+  @Post('confirm')
+  findUserByEmail(@Body() body: any) {
+    return this.userService.confirmUserByEmail(body);
+  }
+
+  @Post('confirm/:token')
+  confirmUser(@Param('token') token: string) {
+    return this.userService.emailVerify(token);
   }
 
   @Put(':id')

@@ -34,8 +34,20 @@ export class UserService {
     }
 
     const userInfo = await this.repository.save(data);
-    await this.sendEmail(userInfo.email, userInfo.id);
     return userInfo;
+  }
+
+  async confirmUserByEmail(body: any) {
+    const { email, duplicate } = body;
+    if (duplicate) {
+      const user = await this.repository.find({ where: { email } });
+      if (user) {
+        return false;
+      }
+    }
+
+    await this.sendEmail(email);
+    return true;
   }
 
   async loginByEmail(body: any) {
@@ -44,9 +56,9 @@ export class UserService {
 
       const userInfo = await this.repository.findOne({ where: { email } });
 
-      if (userInfo.verify == false) {
-        return { msg: 'Not authenticated' };
-      }
+      // if (userInfo.verify == false) {
+      //   return { msg: 'Not authenticated' };
+      // }
       if (md5(password) === userInfo.password) {
         return userInfo;
       } else {
@@ -74,28 +86,17 @@ export class UserService {
     return await this.repository.delete(id);
   }
 
-  async getEmailConfirmToken(email: string) {
-    try {
-      return sign({ email }, process.env.ACCESS_SECRET as string, {
-        expiresIn: '15m',
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async emailVerify(userId: number, token: string) {
+  async emailVerify(token: string) {
     const tokenData = verify(token, process.env.ACCESS_SECRET as string);
 
     if (tokenData) {
-      this.update(userId, { verify: true });
-      return `<script type="text/javascript">alert("Successfully verified"); window.location="/"; </script>`;
+      return true;
     } else {
-      return `<script type="text/javascript">alert("Not verified"); window.location="/"; </script>`;
+      return false;
     }
   }
 
-  async sendEmail(email: string, userId: number) {
+  async sendEmail(email: string) {
     const transporter = nodeMailer.createTransport({
       service: 'gmail',
       auth: {
@@ -104,53 +105,24 @@ export class UserService {
       },
     });
     const token = await this.getEmailConfirmToken(email);
-    const url = `${process.env.SERVER_URL}/user/confirm/${token}/${userId}`;
 
     const mailOptions = {
       to: `${email}`,
-      subject: '가입 인증 메일',
+      subject: '인증코드 메일',
       html: `
-    메일인증 버튼를 누르시면 가입 인증이 완료됩니다.<br/>
-    인증은 메일전송후 15분까지 유효합니다.<br/>
-    <a style="color: #FFF; text-decoration: none; text-align: center;" href=${url} target="_blank">
-        <p style="display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #3bc9db; line-height: 45px; vertical-align: middle; font-size: 16px;">
-            메일 인증
-        </p>
-    </a>
+      인증코드: ${token}
       `,
     };
     await transporter.sendMail(mailOptions);
   }
 
-  async resetPassword(body: any) {
-    const { email } = body;
-
-    const userInfo = await this.repository.findOne({ where: { email } });
-
-    if (!userInfo) {
-      return { msg: 'Invalid email' };
+  async getEmailConfirmToken(email: string) {
+    try {
+      return sign({ email }, process.env.ACCESS_SECRET as string, {
+        expiresIn: '15m',
+      });
+    } catch (err) {
+      console.log(err);
     }
-
-    const newPassword = (await this.getEmailConfirmToken(email)).slice(-6);
-    await this.snedResetPasswordEmail(email, newPassword);
-    return;
-  }
-
-  async snedResetPasswordEmail(email: string, password: string) {
-    const transporter = nodeMailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.NODEMAILER_USER,
-        pass: process.env.NODEMAILER_PASSWORD,
-      },
-    });
-
-    const mailOptions = {
-      to: `${email}`,
-      subject: '비빌번호 초기화 메일',
-      html: `
-  새로운 비밀번호는 ${password} 입니다.<br/>  `,
-    };
-    await transporter.sendMail(mailOptions);
   }
 }
