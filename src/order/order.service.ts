@@ -35,6 +35,7 @@ export class OrderService {
         { user: { id: userId }, reserv: 0, status: Not(0) },
         { user: { id: userId }, reserv: 1, status: Not(0) },
       ],
+      relations: { reviews: true },
     });
   }
 

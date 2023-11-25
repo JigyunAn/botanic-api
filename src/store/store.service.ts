@@ -16,7 +16,9 @@ export class StoreService {
 
   async findStore(query: getStoreDto) {
     const { category, availableDay } = query;
-    let qb = this.repository.createQueryBuilder('store');
+    let qb = this.repository
+      .createQueryBuilder('store')
+      .leftJoin('store.review', 'review');
 
     if (category) {
       qb = qb.andWhere(

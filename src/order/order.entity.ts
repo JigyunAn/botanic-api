@@ -45,6 +45,9 @@ export class Order extends BaseModel {
   @Column({ type: 'varchar' })
   payment_id: string;
 
+  @Column({ type: 'int' })
+  delivery_price: number;
+
   @ManyToOne(() => User, (el) => el.orders)
   @JoinColumn({ name: 'user_id' })
   user: User;
@@ -54,5 +57,5 @@ export class Order extends BaseModel {
   store: Store;
 
   @OneToMany(() => Review, (el) => el.order)
-  reviews: Store[];
+  reviews: Review[];
 }

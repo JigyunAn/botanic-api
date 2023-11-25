@@ -4,6 +4,7 @@ import { BaseModel } from '../common/entity/base.entity';
 import { Like } from 'src/like/like.entity';
 import { Review } from 'src/review/review.entity';
 import { Order } from 'src/order/order.entity';
+import { Product } from 'src/product/product.entity';
 @Entity()
 export class Store extends BaseModel {
   @Column({ type: 'varchar' })
@@ -53,4 +54,7 @@ export class Store extends BaseModel {
 
   @OneToMany(() => Order, (el) => el.store)
   orders: Order[];
+
+  @OneToMany(() => Product, (el) => el.store)
+  products: Product[];
 }
