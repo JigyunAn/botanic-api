@@ -28,8 +28,8 @@ export class ProductService {
     return `This action returns all product`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    return await this.repository.findOne({ where: { id } });
   }
 
   remove(id: number) {

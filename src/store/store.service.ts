@@ -18,7 +18,7 @@ export class StoreService {
     const { category, availableDay } = query;
     let qb = this.repository
       .createQueryBuilder('store')
-      .leftJoin('store.review', 'review');
+      .leftJoin('store.reviews', 'review');
 
     if (category) {
       qb = qb.andWhere(

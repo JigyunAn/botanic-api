@@ -14,6 +14,7 @@ import { LikeModule } from './like/like.module';
 import { ReviewModule } from './review/review.module';
 import { OrderModule } from './order/order.module';
 import { ProductModule } from './product/product.module';
+import { ProductOptionModule } from './product_option/product_option.module';
 import * as winston from 'winston';
 import * as Joi from 'joi';
 
@@ -76,6 +77,7 @@ import * as Joi from 'joi';
     ReviewModule,
     OrderModule,
     ProductModule,
+    ProductOptionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
