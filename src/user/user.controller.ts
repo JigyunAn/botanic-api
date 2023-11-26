@@ -6,7 +6,10 @@ import {
   Param,
   Delete,
   Put,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -16,8 +19,12 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @UseInterceptors(FilesInterceptor('image', 10))
+  create(
+    @Body() createUserDto: CreateUserDto,
+    @UploadedFiles() file: Array<Express.MulterS3.File>,
+  ) {
+    return this.userService.create(createUserDto, file);
   }
 
   @Post('login')

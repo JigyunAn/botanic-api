@@ -10,8 +10,17 @@ export class StoreService {
     @InjectRepository(Store)
     private repository: Repository<Store>,
   ) {}
-  async create(body: any) {
-    return await this.repository.save(body);
+  async create(body: any, file?: Array<Express.MulterS3.File>) {
+    const { ...data } = body;
+
+    if (file && file.length > 0) {
+      const image = [];
+      for (const imageData of file) {
+        image.push(imageData.location);
+      }
+      data.image = image;
+    }
+    return await this.repository.save(data);
   }
 
   async findStore(query: getStoreDto) {

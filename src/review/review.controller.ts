@@ -6,7 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { ReviewService } from './review.service';
 
 @Controller('review')
@@ -14,8 +17,12 @@ export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
-  create(@Body() createReviewDto: any) {
-    return this.reviewService.create(createReviewDto);
+  @UseInterceptors(FilesInterceptor('image', 10))
+  create(
+    @Body() createReviewDto: any,
+    @UploadedFiles() file: Array<Express.MulterS3.File>,
+  ) {
+    return this.reviewService.create(createReviewDto, file);
   }
 
   @Get('store/:storeId')

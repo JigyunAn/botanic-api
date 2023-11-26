@@ -7,7 +7,10 @@ import {
   Param,
   Delete,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { StoreService } from './store.service';
 import { getStoreDto } from './store-dto';
 
@@ -16,8 +19,12 @@ export class StoreController {
   constructor(private readonly storeService: StoreService) {}
 
   @Post()
-  create(@Body() createStoreDto: any) {
-    return this.storeService.create(createStoreDto);
+  @UseInterceptors(FilesInterceptor('image', 10))
+  create(
+    @Body() createStoreDto: any,
+    @UploadedFiles() file: Array<Express.MulterS3.File>,
+  ) {
+    return this.storeService.create(createStoreDto, file);
   }
 
   @Get()

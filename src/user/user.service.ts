@@ -13,8 +13,17 @@ export class UserService {
     private repository: Repository<User>,
   ) {}
 
-  async create(body: any) {
+  async create(body: any, file?: Array<Express.MulterS3.File>) {
     const { lat, lng, ...data } = body;
+
+    if (file && file.length > 0) {
+      const image = [];
+      for (const imageData of file) {
+        image.push(imageData.location);
+      }
+      data.image = image;
+    }
+
     const emailData = await this.repository.findOne({
       where: { email: data.email },
     });

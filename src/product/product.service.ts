@@ -12,8 +12,15 @@ export class ProductService {
     private storeService: StoreService,
   ) {}
 
-  async create(body: any) {
+  async create(body: any, file?: Array<Express.MulterS3.File>) {
     const { storeId, ...data } = body;
+    if (file && file.length > 0) {
+      const image = [];
+      for (const imageData of file) {
+        image.push(imageData.location);
+      }
+      data.image = image;
+    }
 
     const store = await this.storeService.findOne(storeId);
     data.store = store;

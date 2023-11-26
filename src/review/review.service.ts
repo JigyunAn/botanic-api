@@ -16,8 +16,16 @@ export class ReviewService {
     private orderService: OrderService,
   ) {}
 
-  async create(body: any) {
+  async create(body: any, file?: Array<Express.MulterS3.File>) {
     const { userId, storeId, orderId, ...data } = body;
+    if (file && file.length > 0) {
+      const image = [];
+      for (const imageData of file) {
+        image.push(imageData.location);
+      }
+      data.image = image;
+    }
+
     const [user, store, order] = await Promise.all([
       this.userService.findOne(userId),
       this.storeService.findOne(storeId),

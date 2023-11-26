@@ -7,7 +7,10 @@ import {
   Param,
   Delete,
   Put,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { ProductService } from './product.service';
 
 @Controller('product')
@@ -15,8 +18,12 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  create(@Body() createProductDto: any) {
-    return this.productService.create(createProductDto);
+  @UseInterceptors(FilesInterceptor('image', 10))
+  create(
+    @Body() createProductDto: any,
+    @UploadedFiles() file: Array<Express.MulterS3.File>,
+  ) {
+    return this.productService.create(createProductDto, file);
   }
 
   @Put(':id')

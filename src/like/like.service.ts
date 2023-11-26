@@ -16,6 +16,10 @@ export class LikeService {
 
   async create(body: any) {
     const { userId, storeId } = body;
+    const existData = await this.findOneLike(userId, storeId);
+    if (existData) {
+      return this.remove(existData.id);
+    }
     const [user, store] = await Promise.all([
       this.userService.findOne(userId),
       this.storeService.findOne(storeId),
@@ -32,5 +36,15 @@ export class LikeService {
       where: { user: { id: user_id } },
       relations: { store: true },
     });
+  }
+
+  async findOneLike(userId, storeId) {
+    return await this.repository.findOne({
+      where: [{ user: { id: userId } }, { store: { id: storeId } }],
+    });
+  }
+
+  async remove(id: number) {
+    return await this.repository.delete(id);
   }
 }
