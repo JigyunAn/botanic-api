@@ -31,11 +31,14 @@ export class ReviewService {
   }
 
   async findByStore(storeId: number) {
-    return await this.repository.find({ where: { store: { id: storeId } } });
+    return await this.repository.find({
+      where: { store: { id: storeId } },
+      relations: { user: true },
+    });
   }
 
   async findReview(limit: number) {
-    return this.repository.find({ take: limit });
+    return this.repository.find({ take: limit, relations: { user: true } });
   }
 
   findAll() {
