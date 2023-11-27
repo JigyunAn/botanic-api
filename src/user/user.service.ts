@@ -87,8 +87,19 @@ export class UserService {
     return await this.repository.findOne({ where: { id } });
   }
 
-  async update(id: number, body: any) {
-    return await this.repository.update(id, body);
+  async update(id: number, body: any, file?: Array<Express.MulterS3.File>) {
+    const { original_image = [], ...data } = body;
+
+    data.image = original_image;
+    if (file && file.length > 0) {
+      const image = [];
+      for (const imageData of file) {
+        image.push(imageData.location);
+      }
+      data.image = image;
+    }
+
+    return await this.repository.update(id, data);
   }
 
   async remove(id: number) {

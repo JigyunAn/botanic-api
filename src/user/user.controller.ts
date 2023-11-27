@@ -53,8 +53,13 @@ export class UserController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @UseInterceptors(FilesInterceptor('image', 10))
+  update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @UploadedFiles() file: Array<Express.MulterS3.File>,
+  ) {
+    return this.userService.update(+id, updateUserDto, file);
   }
 
   @Delete(':id')
