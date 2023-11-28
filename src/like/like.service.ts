@@ -40,7 +40,7 @@ export class LikeService {
 
   async findOneLike(userId, storeId) {
     return await this.repository.findOne({
-      where: [{ user: { id: userId } }, { store: { id: storeId } }],
+      where: { user: { id: userId }, store: { id: storeId } },
     });
   }
 
