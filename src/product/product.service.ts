@@ -27,8 +27,19 @@ export class ProductService {
     return await this.repository.save(data);
   }
 
-  async update(id: number, body: any) {
-    return await this.repository.update(id, body);
+  async update(id: number, body: any, file?: Array<Express.MulterS3.File>) {
+    const { original_image = '[]', ...data } = body;
+
+    data.image = JSON.parse(original_image);
+    if (file && file.length > 0) {
+      const image = [];
+      for (const imageData of file) {
+        image.push(imageData.location);
+      }
+      data.image.push(...image);
+    }
+
+    return await this.repository.update(id, data);
   }
 
   findAll() {

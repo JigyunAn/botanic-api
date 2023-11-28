@@ -27,8 +27,13 @@ export class ProductController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() body: any) {
-    return this.productService.update(+id, body);
+  @UseInterceptors(FilesInterceptor('image', 10))
+  update(
+    @Param('id') id: string,
+    @Body() body: any,
+    @UploadedFiles() file: Array<Express.MulterS3.File>,
+  ) {
+    return this.productService.update(+id, body, file);
   }
 
   @Get()

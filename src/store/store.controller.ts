@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   Query,
@@ -35,6 +35,16 @@ export class StoreController {
   @Get('/detail/:id')
   getDetailStore(@Param('id') id: number) {
     return this.storeService.getDetailStore(id);
+  }
+
+  @Put(':id')
+  @UseInterceptors(FilesInterceptor('image', 10))
+  update(
+    @Param('id') id: string,
+    @Body() body: any,
+    @UploadedFiles() file: Array<Express.MulterS3.File>,
+  ) {
+    return this.storeService.update(+id, body, file);
   }
 
   @Delete(':id')

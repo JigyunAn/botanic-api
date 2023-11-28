@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   UploadedFiles,
@@ -40,9 +40,14 @@ export class ReviewController {
     return this.reviewService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReviewDto: any) {
-    return this.reviewService.update(+id, updateReviewDto);
+  @Put(':id')
+  @UseInterceptors(FilesInterceptor('image', 10))
+  update(
+    @Param('id') id: string,
+    @Body() body: any,
+    @UploadedFiles() file: Array<Express.MulterS3.File>,
+  ) {
+    return this.reviewService.update(+id, body, file);
   }
 
   @Delete(':id')

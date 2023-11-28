@@ -71,8 +71,19 @@ export class StoreService {
     return sum / reviews.length;
   }
 
-  update(id: number, updateStoreDto: any) {
-    return `This action updates a #${id} store`;
+  async update(id: number, body: any, file?: Array<Express.MulterS3.File>) {
+    const { original_image = '[]', ...data } = body;
+
+    data.image = JSON.parse(original_image);
+    if (file && file.length > 0) {
+      const image = [];
+      for (const imageData of file) {
+        image.push(imageData.location);
+      }
+      data.image.push(...image);
+    }
+
+    return await this.repository.update(id, data);
   }
 
   remove(id: number) {

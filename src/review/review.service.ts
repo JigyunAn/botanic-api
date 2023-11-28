@@ -57,8 +57,19 @@ export class ReviewService {
     return `This action returns a #${id} review`;
   }
 
-  update(id: number, updateReviewDto: any) {
-    return `This action updates a #${id} review`;
+  async update(id: number, body: any, file?: Array<Express.MulterS3.File>) {
+    const { original_image = '[]', ...data } = body;
+
+    data.image = JSON.parse(original_image);
+    if (file && file.length > 0) {
+      const image = [];
+      for (const imageData of file) {
+        image.push(imageData.location);
+      }
+      data.image.push(...image);
+    }
+
+    return await this.repository.update(id, data);
   }
 
   async remove(id: number) {

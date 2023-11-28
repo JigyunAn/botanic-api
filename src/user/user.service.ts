@@ -88,15 +88,15 @@ export class UserService {
   }
 
   async update(id: number, body: any, file?: Array<Express.MulterS3.File>) {
-    const { original_image = [], ...data } = body;
+    const { original_image = '[]', ...data } = body;
 
-    data.image = original_image;
+    data.image = JSON.parse(original_image);
     if (file && file.length > 0) {
       const image = [];
       for (const imageData of file) {
         image.push(imageData.location);
       }
-      data.image = image;
+      data.image.push(...image);
     }
 
     return await this.repository.update(id, data);
