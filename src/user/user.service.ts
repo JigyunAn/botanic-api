@@ -102,14 +102,18 @@ export class UserService {
     return await this.repository.update(id, data);
   }
 
-  async updateToBody(id: number, body: any) {
+  async updateToBody(body: any) {
     const { ...data } = body;
+
+    const userInfo = await this.repository.findOne({
+      where: { email: body.email },
+    });
 
     if (body.password) {
       data.password = md5(body.password);
     }
 
-    return await this.repository.update(id, data);
+    return await this.repository.update(userInfo.id, data);
   }
 
   async remove(id: number) {
