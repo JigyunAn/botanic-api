@@ -12,7 +12,7 @@ export class User extends BaseModel {
   @Column({ type: 'varchar' })
   nickname: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   phone: string;
 
   @Column({ type: 'varchar' })
