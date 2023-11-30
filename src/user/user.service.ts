@@ -50,13 +50,13 @@ export class UserService {
     const { email, duplicate } = body;
     if (duplicate) {
       const user = await this.repository.find({ where: { email } });
-      if (user) {
-        return false;
+      if (user.length != 0) {
+        return { status: false };
       }
     }
 
-    await this.sendEmail(email);
-    return true;
+    const token = await this.sendEmail(email);
+    return { token, status: true };
   }
 
   async loginByEmail(body: any) {
@@ -134,6 +134,7 @@ export class UserService {
       `,
     };
     await transporter.sendMail(mailOptions);
+    return token.slice(-5);
   }
 
   async getEmailConfirmToken(email: string) {

@@ -46,7 +46,18 @@ export class ReviewService {
   }
 
   async findReview(limit: number) {
-    return this.repository.find({ take: limit, relations: { user: true } });
+    return this.repository.find({
+      take: limit || 10,
+      relations: { user: true },
+    });
+  }
+
+  async findBestReview(limit: number) {
+    return this.repository.find({
+      take: limit || 10,
+      where: { rate: 5 },
+      relations: { user: true },
+    });
   }
 
   findAll() {

@@ -35,6 +35,11 @@ export class ReviewController {
     return this.reviewService.findReview(+limit);
   }
 
+  @Get('best/:limit')
+  findBestReview(@Param('limit') limit: string) {
+    return this.reviewService.findBestReview(+limit);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.reviewService.findOne(+id);
