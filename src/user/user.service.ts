@@ -102,6 +102,16 @@ export class UserService {
     return await this.repository.update(id, data);
   }
 
+  async updateToBody(id: number, body: any) {
+    const { ...data } = body;
+
+    if (body.password) {
+      data.password = md5(body.password);
+    }
+
+    return await this.repository.update(id, data);
+  }
+
   async remove(id: number) {
     return await this.repository.delete(id);
   }
@@ -130,7 +140,7 @@ export class UserService {
       to: `${email}`,
       subject: '인증코드 메일',
       html: `
-      인증코드: ${token}
+      인증코드: ${token.slice(-5)}
       `,
     };
     await transporter.sendMail(mailOptions);

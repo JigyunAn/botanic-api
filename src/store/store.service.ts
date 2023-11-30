@@ -53,7 +53,10 @@ export class StoreService {
   async getDetailStore(storeId: number) {
     const storeData = await this.repository.findOne({
       where: { id: storeId },
-      relations: { reviews: true, products: { product_options: true } },
+      relations: {
+        reviews: { user: true },
+        products: { product_options: true },
+      },
     });
     const rate = parseFloat(this.getRate(storeData.reviews).toFixed(1));
 

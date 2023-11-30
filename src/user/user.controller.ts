@@ -62,6 +62,11 @@ export class UserController {
     return this.userService.update(+id, updateUserDto, file);
   }
 
+  @Put('password/:id')
+  updateToBody(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateToBody(+id, updateUserDto);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
